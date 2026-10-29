@@ -23,13 +23,19 @@ data-swiper-mobileslides="{{ particle.mobileslides|default('2') }}" data-swiper-
 data-swiper-mobile-breakpoint="{{ gantry.config.get('styles.breakpoints.large-mobile-container')|default('30rem') }}" data-swiper-tablet-breakpoint="{{ gantry.config.get('styles.breakpoints.tablet-container')|default('51rem') }}" data-swiper-desktop-breakpoint="{{ gantry.config.get('styles.breakpoints.desktop-container')|default('76rem') }}" data-swiper-largedesktop-breakpoint="{{ gantry.config.get('styles.breakpoints.large-desktop-container')|default('88rem') }}"
 {% endset %}
 
-	<div id="{{ id }}" class="g-slider swiper-container {{ particle.class|e }}" data-slider-id="{{ id }}" data-slider-effect="{{ particle.effect }}" data-slider-autoplay="{% if particle.autoplay == "enabled" %}true{% else %}false{% endif %}" data-slider-loop="{% if particle.loop == "enabled" %}true{% else %}false{% endif %}" data-slider-timeout="{{ particle.autoplayTimeout }}" data-slider-speed="{{ particle.speed }}" data-slider-touchmove="{% if particle.touchmove == "enabled" %}true{% else %}false{% endif %}" data-slider-centered="{% if particle.centered == "enabled" %}true{% else %}false{% endif %}" {% if gantry.page.direction == 'rtl' %} dir="rtl" {% endif %} {{ swiper_slides }} {{ swiper_breakpoints }}>
+{% set lightbox = particle.lightbox|default('enabled') == 'enabled' %}
+{% set lightbox_zoom = particle.lightboxzoom|default('Agrandir l\'image') %}
+
+	<div id="{{ id }}" class="g-slider swiper-container {{ particle.class|e }}"{% if lightbox %} data-slider-lightbox data-lightbox-prev="{{ particle.lightboxprev|default('Image précédente')|e('html_attr') }}" data-lightbox-next="{{ particle.lightboxnext|default('Image suivante')|e('html_attr') }}" data-lightbox-close="{{ particle.lightboxclose|default('Fermer')|e('html_attr') }}"{% endif %} data-slider-id="{{ id }}" data-slider-effect="{{ particle.effect }}" data-slider-autoplay="{% if particle.autoplay == "enabled" %}true{% else %}false{% endif %}" data-slider-loop="{% if particle.loop == "enabled" %}true{% else %}false{% endif %}" data-slider-timeout="{{ particle.autoplayTimeout }}" data-slider-speed="{{ particle.speed }}" data-slider-touchmove="{% if particle.touchmove == "enabled" %}true{% else %}false{% endif %}" data-slider-centered="{% if particle.centered == "enabled" %}true{% else %}false{% endif %}" {% if gantry.page.direction == 'rtl' %} dir="rtl" {% endif %} {{ swiper_slides }} {{ swiper_breakpoints }}>
 
 		<div class="g-slider-carousel swiper-wrapper" style="height: {{ particle.height|default('60vh') }};">
 			{% if not particle.source or particle.source == 'particle' %}
 				{% for item in particle.items %}
-					<div class="swiper-slide" style="background-image: url({{ url(item.image)|e }});">
+					<div class="swiper-slide" style="background-image: url({{ url(item.image)|e }});"{% if lightbox and item.image %} data-slider-image="{{ url(item.image)|e('html_attr') }}" data-slider-title="{{ item.title|striptags|e('html_attr') }}" data-slider-index="{{ loop.index0 }}"{% endif %}>
 						<div class="g-slider-overlay"></div>
+						{% if lightbox and item.image %}
+							<button type="button" class="g-slider-zoom">{{ lightbox_zoom|e }}{% if item.title %} : {{ item.title|striptags|e }}{% endif %}</button>
+						{% endif %}
 						{% if particle.pattern == 'enabled' %}
 							<div class="g-slider-pattern">
 								<svg width="449" height="203" viewbox="0 0 449 203" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -98,5 +104,8 @@ data-swiper-mobile-breakpoint="{{ gantry.config.get('styles.breakpoints.large-mo
     {% do gantry.document.addScript(url('gantry-theme://js/length.min.js'), 10, 'footer') %}
 	{% do gantry.document.addScript(url('gantry-theme://js/swiper.min.js'), 10, 'footer') %}
 	{% do gantry.document.addScript(url('gantry-theme://js/slider.init.js'), 10, 'footer') %}
+	{% if particle.lightbox|default('enabled') == 'enabled' %}
+		{% do gantry.document.addScript(url('gantry-theme://js/slider-lightbox.js'), 10, 'footer') %}
+	{% endif %}
 {% endblock %}
 

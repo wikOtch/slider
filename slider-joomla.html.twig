@@ -44,8 +44,11 @@
 		{% endif %}
 	{% endif %}
 
-	<div class="swiper-slide" style="background-image: url({{ url(article_image)|e }});">
+	<div class="swiper-slide" style="background-image: url({{ url(article_image)|e }});"{% if lightbox and article_image %} data-slider-image="{{ url(article_image)|e('html_attr') }}" data-slider-title="{{ article.title|striptags|e('html_attr') }}" data-slider-index="{{ loop.index0 }}"{% endif %}>
 	<div class="g-slider-overlay"></div>
+	{% if lightbox and article_image %}
+		<button type="button" class="g-slider-zoom">{{ lightbox_zoom|e }} : {{ article.title|striptags|e }}</button>
+	{% endif %}
 						{% if particle.pattern == 'enabled' %}
 							<div class="g-slider-pattern">
 								<svg width="449" height="203" viewbox="0 0 449 203" fill="none" xmlns="http://www.w3.org/2000/svg">

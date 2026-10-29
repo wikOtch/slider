@@ -52,6 +52,43 @@ form:
                 enabled: Enable
                 disabled: Disable
 
+            lightbox:
+              type: select.select
+              label: Lightbox
+              description: Open the image in a larger view when a slide is clicked, with Prev / Next buttons to browse the images.
+              default: enabled
+              options:
+                enabled: Enable
+                disabled: Disable
+
+            lightboxzoom:
+              type: input.text
+              label: Lightbox Open Text
+              description: Accessible label of the button that opens a slide in the lightbox.
+              placeholder: Agrandir l'image
+              default: Agrandir l'image
+
+            lightboxprev:
+              type: input.text
+              label: Lightbox Prev Text
+              description: Accessible label of the lightbox previous button.
+              placeholder: Image précédente
+              default: Image précédente
+
+            lightboxnext:
+              type: input.text
+              label: Lightbox Next Text
+              description: Accessible label of the lightbox next button.
+              placeholder: Image suivante
+              default: Image suivante
+
+            lightboxclose:
+              type: input.text
+              label: Lightbox Close Text
+              description: Accessible label of the lightbox close button.
+              placeholder: Fermer
+              default: Fermer
+
             autoplay:
               type: select.select
               label: Autoplay
